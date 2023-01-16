@@ -78,4 +78,5 @@ class Remaining1(BaseSolver):
             self._iterations += 1
             logging.debug("Remaining-one solver finished iteration {} total found".format(self._steps))
 
+        self._possibleValues = []
         return self._steps

@@ -20,7 +20,10 @@ class EliminationCouples(BaseSolver):
             found = False
             vals = board.values()
             possibleValues = np.ones((dim,dim,dim),dtype=np.bool_)
+            if self._possibleValues != []:
+                possibleValues = self._possibleValues
             
+
             # eliminating values
             for x in np.arange(dim):
                 for y in np.arange(dim):
@@ -81,6 +84,7 @@ class EliminationCouples(BaseSolver):
             self._iterations += 1
             logging.debug("Elimination-couples solver finished iteration {} total found".format(self._steps))
 
+        self._possibleValues = possibleValues
         return self._steps
 
     def _inSameRow(self, x,y,px,py):

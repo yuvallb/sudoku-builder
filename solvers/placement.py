@@ -103,6 +103,7 @@ class Placement(BaseSolver):
             self._iterations += 1
             logging.debug("Placement solver finished iteration {} total found".format(self._steps))
 
+        self._possibleValues = []
         return self._steps
 
     def _colHasValue(self, vals, x, pv):

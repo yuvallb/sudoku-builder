@@ -35,6 +35,14 @@ class MultiSolver(BaseSolver):
             if self._steps >= self._maxSteps:
                 break
 
+            foundSolver = self._placer.solve(board)
+            if foundSolver > 0:
+                found = True
+                self._steps += foundSolver
+
+            if self._steps >= self._maxSteps:
+                break
+
             foundSolver = self._eliminator.solve(board)
             if foundSolver > 0:
                 found = True
@@ -43,13 +51,8 @@ class MultiSolver(BaseSolver):
             if self._steps >= self._maxSteps:
                 break
 
-            foundSolver = self._placer.solve(board)
-            if foundSolver > 0:
-                found = True
-                self._steps += foundSolver
-
-            if self._steps >= self._maxSteps:
-                break
+            possibleValues = self._eliminator.getRemainingPossibleValues()
+            self._eliminator2.setPreviousPossibleValues(possibleValues)
 
             foundSolver = self._eliminator2.solve(board)
             if foundSolver > 0:

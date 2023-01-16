@@ -9,6 +9,7 @@ from validators.noConflict import NoConflict
 from boards.examplesDim9 import ExamplesDim9
 from solvers.remaining1 import Remaining1
 from solvers.elimination import Elimination
+from solvers.eliminationremaining import EliminationRemaining
 from solvers.eliminationcouples import EliminationCouples
 from solvers.placement import Placement
 from solvers.multisolver import MultiSolver
@@ -410,7 +411,47 @@ class SolverTests:
         else:
             print('Fail: solver performed {} steps and was not able to solve'.format(steps))
 
+    def _testEliminationRemainingRow(self):
+        solver = EliminationRemaining()
+        examples = ExamplesDim9()
+        b = Board(9)
+        b.populate(examples.full1)
+        valuesFull = b.values()
+        b.fillValue(1,1,0)
+        logging.debug(b.values())
+        valuesBefore = b.values()
+        steps = solver.solve(b)
+        valuesAfter = b.values()
+        logging.debug(b.values())
+        if np.array_equal(valuesFull,valuesBefore):
+            print('Setup error: did not remove values')
+        if np.array_equal(valuesFull,valuesAfter):
+            print('Pass: solver restored missing values in {} steps'.format(steps))
+        else:
+            print('Fail: solver performed {} steps and was not able to solve'.format(steps))
+
+    def _testEliminationRemainingMedium(self):
+        solver = EliminationRemaining()
+        examples = ExamplesDim9()
+        b = Board(9)
+        b.populate(examples.full1)
+        valuesFull = b.values()
+        b.fillValue(1,1,0)
+        logging.debug(b.values())
+        valuesBefore = b.values()
+        steps = solver.solve(b)
+        valuesAfter = b.values()
+        logging.debug(b.values())
+        if np.array_equal(valuesFull,valuesBefore):
+            print('Setup error: did not remove values')
+        if np.array_equal(valuesFull,valuesAfter):
+            print('Pass: solver restored missing values in {} steps'.format(steps))
+        else:
+            print('Fail: solver performed {} steps and was not able to solve'.format(steps))
+
+
     def run(self):
+        """
         self._testRemaining1Row()
         self._testRemaining1RowsCols()
         self._testRemaining1Cubes()
@@ -431,7 +472,10 @@ class SolverTests:
 
         self._testMultiMedium()
         self._testMultiHard()
+        """
+        self._testEliminationRemainingRow()
+        #self._testEliminationRemainingMedium()
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=logging.DEBUG)
 
 SolverTests().run()
