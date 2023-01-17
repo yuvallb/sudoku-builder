@@ -418,6 +418,8 @@ class SolverTests:
         b.populate(examples.full1)
         valuesFull = b.values()
         b.fillValue(1,1,0)
+        b.fillValue(9,2,0)
+        b.fillValue(8,7,0)
         logging.debug(b.values())
         valuesBefore = b.values()
         steps = solver.solve(b)
@@ -451,7 +453,7 @@ class SolverTests:
 
 
     def run(self):
-        """
+
         self._testRemaining1Row()
         self._testRemaining1RowsCols()
         self._testRemaining1Cubes()
@@ -467,15 +469,15 @@ class SolverTests:
         self._testElimination2Cubes()
         self._testElimination2Easy()
         
+        self._testEliminationRemainingRow()
+        self._testEliminationRemainingMedium()
+
         self._testPlacementRowsCols()
         self._testPlacementMedium()
 
         self._testMultiMedium()
         self._testMultiHard()
-        """
-        self._testEliminationRemainingRow()
-        #self._testEliminationRemainingMedium()
-
-logging.basicConfig(level=logging.DEBUG)
+        
+logging.basicConfig(level=logging.WARN)
 
 SolverTests().run()

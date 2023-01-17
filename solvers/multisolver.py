@@ -6,6 +6,7 @@ from solvers.remaining1 import Remaining1
 from solvers.elimination import Elimination
 from solvers.placement import Placement
 from solvers.eliminationcouples import EliminationCouples
+from solvers.eliminationremaining import EliminationRemaining
 
 import numpy as np
 
@@ -17,6 +18,7 @@ class MultiSolver(BaseSolver):
         self._placer = Placement()
         self._remaining1 = Remaining1()
         self._eliminator2 = EliminationCouples()
+        self._eliminatorR = EliminationRemaining()
         
     def solve(self, board: Board) -> int:
         found = True
@@ -55,6 +57,14 @@ class MultiSolver(BaseSolver):
             self._eliminator2.setPreviousPossibleValues(possibleValues)
 
             foundSolver = self._eliminator2.solve(board)
+            if foundSolver > 0:
+                found = True
+                self._steps += foundSolver
+
+            possibleValues = self._eliminator2.getRemainingPossibleValues()
+            self._eliminatorR.setPreviousPossibleValues(possibleValues)
+
+            foundSolver = self._eliminatorR.solve(board)
             if foundSolver > 0:
                 found = True
                 self._steps += foundSolver

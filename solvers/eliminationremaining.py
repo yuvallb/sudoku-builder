@@ -41,26 +41,42 @@ class EliminationRemaining(BaseSolver):
 
             # find remaining in rows
             for y in np.arange(dim):
-                counter = np.zeros(dim, dtype=np.int_)
+                marks = np.zeros(dim, dtype=np.int_)
                 for x in np.arange(dim):
                     if vals[y][x] == 0:
-                        counter[possibleValues[y][x]] += 1
-                for x in np.arange(dim):
-                    if counter[x] == 1:
-                        print("Got {} in location {} , {} rows",x, x , y)
-                        print(counter)
+                        marks[possibleValues[y][x]] += 1
+                for missingValue in np.arange(dim):
+                    if marks[missingValue] == 1:
+                        missingValueRow = y
+                        missingValueColumn = np.where(np.where(possibleValues[y])[1]==missingValue)[0][0] 
+                        #print("Can fill {} in column {} row {}".format(missingValue+1, missingValueColumn+1, missingValueRow+1))
+                        board.fillValue(missingValueColumn+1, missingValueRow+1, missingValue+1)
+                        vals = board.values()
+                        logging.debug("Elimination-remaining(row) solver: Enter {} in ({} , {})".format(missingValue+1, missingValueColumn+1, missingValueRow+1))
+                        self._steps += 1
+                        found = True
 
-            # find remaining in rows
+            # find remaining in cols
             for x in np.arange(dim):
-                counter = np.zeros(dim, dtype=np.int_)
+                marks = np.zeros(dim, dtype=np.int_)
                 for y in np.arange(dim):
                     if vals[y][x] == 0:
-                        counter[possibleValues[y][x]] += 1
-                for y in np.arange(dim):
-                    if counter[y] == 1:
-                        print("Got {} in location {} , {} cols",x, x , y)
-                        print(counter)
+                        marks[possibleValues[y][x]] += 1
+                for missingValue in np.arange(dim):
+                    if marks[missingValue] == 1:
+                        missingValueColumn = x
+                        inverted = np.array(list(map(lambda i: possibleValues[i][x], np.arange(dim))))
+                        missingValueRow = np.where(np.where(inverted)[1]==missingValue)[0][0] 
+                        #print(np.where(np.where(possibleValues[y])[1]==missingValue)[0][0] + 1)
+                        #print(inverted)
+                        #print("Can fill {} in column {} row {}".format(missingValue+1, missingValueColumn+1, missingValueRow+1))
+                        board.fillValue(missingValueColumn+1, missingValueRow+1, missingValue+1)
+                        vals = board.values()
+                        logging.debug("Elimination-remaining(col) solver: Enter {} in ({} , {})".format(missingValue+1, missingValueColumn+1, missingValueRow+1))
+                        self._steps += 1
+                        found = True
 
+            #TODO: find remaining in cubes
 
 
             self._iterations += 1
